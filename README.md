@@ -3,3 +3,9 @@
 ##### Solutions to Advent of Code 2021.
 
 ![Build](https://github.com/evansmal/advent-of-code-2021/actions/workflows/main.yml/badge.svg)
+
+Current progress:
+
+| Day | Stars |
+| - | - |
+| 1 |   |
