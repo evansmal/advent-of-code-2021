@@ -11,5 +11,5 @@ All solutions are implemented in TypeScript.
 | Day | Stars |
 | :-: | :-: |
 | 01 | ⭐⭐ |
-| 02 |  |
+| 02 | ⭐⭐ |
 
