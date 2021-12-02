@@ -1,11 +1,4 @@
-import { readFileSync } from "fs";
-
-function loadInputData(filepath: string) {
-    return readFileSync(filepath)
-        .toString()
-        .split('\n')
-        .slice(0, -1);
-}
+import { loadInputDataFromDay } from "../common/input.js";
 
 function computeWindow(input: number[], index: number, size: number): number {
     return input
@@ -27,7 +20,7 @@ function computeSlidingWindowSumScore(inputs: number[], window_size: number) {
 }
 
 function main() {
-    const inputs = loadInputData("./data/day1.dat").map(x => Number(x));
+    const inputs = loadInputDataFromDay(1).map(x => Number(x));
     const p1 = computeSlidingWindowSumScore(inputs, 1);
     const p2 = computeSlidingWindowSumScore(inputs, 3);
     console.log(p1, p2)
