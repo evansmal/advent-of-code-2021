@@ -26,11 +26,14 @@ function part1(inputs: string[]) {
     const epsilon_counts = countHighBit(inputs.map(toBinarySequence)).map(count => {
         return (count <= inputs.length / 2 ? 1 : 0);
     });
+    return {
+        gamma_rate: sequenceToInt(gamma_counts),
+        epsilon_rate: sequenceToInt(epsilon_counts)
+    };
+}
 
-    const gamma_rate = parseInt(gamma_counts.join(""), 2);
-    const epsilon_rate = parseInt(epsilon_counts.join(""), 2);
-
-    return { gamma_rate, epsilon_rate };
+function sequenceToInt(sequence: BinarySequence): number {
+    return parseInt(sequence.join(""), 2);
 }
 
 function part2(inputs: string[]) {
@@ -54,8 +57,8 @@ function part2(inputs: string[]) {
     }
 
     return {
-        oxygen_gen_rating: parseInt(oxygen_gen_rating[0].join(""), 2),
-        co2_scrubber_rating: parseInt(co2_scrubber_rating[0].join(""), 2)
+        oxygen_gen_rating: sequenceToInt(oxygen_gen_rating[0]),
+        co2_scrubber_rating: sequenceToInt(co2_scrubber_rating[0])
     };
 }
 
@@ -67,7 +70,6 @@ function main() {
 
     const { oxygen_gen_rating, co2_scrubber_rating } = part2(inputs);
     console.log(oxygen_gen_rating * co2_scrubber_rating)
-
 }
 
 main();
