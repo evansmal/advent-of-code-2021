@@ -13,7 +13,7 @@ All solutions are implemented in TypeScript.
 | 01 | ⭐⭐ |
 | 02 | ⭐⭐ |
 | 03 | ⭐⭐ |
-| 04 |  |
+| 04 | ⭐⭐ |
 | 05 |  |
 | 06 |  |
 | 07 |  |

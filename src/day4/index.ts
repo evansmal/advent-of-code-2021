@@ -65,27 +65,58 @@ function computeScore(board: Board, grid_size: number): number {
         .reduce((prev, curr) => curr += prev, 0);
 }
 
+function markBoard(draw: number, board: Board) {
+    const coords = findIndex(board.data, draw, BOARD_SIZE);
+    coords.forEach(coord => markGrid(board.marks, coord));
+}
+
+function findWinner(boards: Board[], grid_size: number) {
+    const winners = [];
+    for (let board_id = 0; board_id < boards.length; board_id++) {
+        if (isWinner(boards[board_id].marks, grid_size)) {
+            winners.push(board_id);
+        }
+    }
+    return winners;
+}
+
 function part1(draws: number[], boards: Board[]) {
     for (let i = 0; i < draws.length; i++) {
         const draw = draws[i];
-        for (const board of boards) {
-            const coords = findIndex(board.data, draw, BOARD_SIZE);
-            coords.forEach(coord => markGrid(board.marks, coord));
-            if (isWinner(board.marks, BOARD_SIZE)) {
-                const score = computeScore(board, BOARD_SIZE);
-                return score * draw;
-            }
+        for (let board_id = 0; board_id < boards.length; board_id++) {
+            markBoard(draw, boards[board_id]);
+        }
+        const winner_ids = findWinner(boards, BOARD_SIZE);
+        if (winner_ids.length > 0) {
+            const score = computeScore(boards[winner_ids[0]], BOARD_SIZE);
+            return score * draw;
         }
     }
+}
 
+function part2(draws: number[], boards: Board[]) {
+    for (let i = 0; i < draws.length; i++) {
+        const draw = draws[i];
+        for (let board_id = 0; board_id < boards.length; board_id++) {
+            markBoard(draw, boards[board_id]);
+        }
+        const winner_ids = findWinner(boards, BOARD_SIZE);
+        if (winner_ids.length > 0) {
+            if (boards.length === 1) {
+                const score = computeScore(boards[0], BOARD_SIZE);
+                return score * draw;
+            }
+            boards = boards.filter((_, index) => (winner_ids.includes(index) === false));
+        }
+    }
 }
 
 function main() {
     const inputs = loadInputDataFromDay(4);
-
     const draws = inputs[0].split(',').map(Number);
     const boards = createBoards(inputs.slice(2));
     console.log(part1(draws, boards));
+    console.log(part2(draws, boards));
 }
 
 main();
