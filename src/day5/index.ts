@@ -56,39 +56,26 @@ function bresenham(line: Line): Vector2D[] {
     return points;
 }
 
-function print<T>(grid: Grid<T>) {
-    let out = "";
-    for (let i = 0; i < grid.length; i++) {
-        for (let j = 0; j < grid.length; j++) {
-            out += grid[j][i] + " ";
-        }
-        out += "\n";
-    }
-    console.log(out);
+function count(grid: Grid<number>) {
+    return grid.map(row => row.filter(elem => elem >= 2)).flat().length;
 }
 
 function part1(inputs: Line[]) {
     const grid = createOccupancyGrid(GRID_SIZE);
     for (const line of inputs) {
         const direction = computeVector(...line)
-        if (direction.x !== 0 && direction.y !== 0) continue;
-        const points = bresenham(line);
-        points.forEach(p => { grid[p.x][p.y]++; });
+        if (direction.x !== 0 && direction.y !== 0) continue; // Skip diagonals
+        bresenham(line).forEach(p => { grid[p.x][p.y]++; });
     }
-    const elements = grid.map(row => row.filter(elem => elem >= 2)).flat().length;
-    return elements;
-
+    return count(grid);
 }
 
 function part2(inputs: Line[]) {
     const grid = createOccupancyGrid(GRID_SIZE);
     for (const line of inputs) {
-        const points = bresenham(line);
-        points.forEach(p => { grid[p.x][p.y]++; });
+        bresenham(line).forEach(p => { grid[p.x][p.y]++; });
     }
-    const elements = grid.map(row => row.filter(elem => elem >= 2)).flat().length;
-    return elements;
-
+    return count(grid);
 }
 
 function main() {
