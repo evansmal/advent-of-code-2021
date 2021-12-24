@@ -80,9 +80,21 @@ function part1(inputs: Line[]) {
 
 }
 
+function part2(inputs: Line[]) {
+    const grid = createOccupancyGrid(GRID_SIZE);
+    for (const line of inputs) {
+        const points = bresenham(line);
+        points.forEach(p => { grid[p.x][p.y]++; });
+    }
+    const elements = grid.map(row => row.filter(elem => elem >= 2)).flat().length;
+    return elements;
+
+}
+
 function main() {
     const inputs = loadInputDataFromDay(5).map(parseRow);
     console.log(part1(inputs));
+    console.log(part2(inputs));
 }
 
 
