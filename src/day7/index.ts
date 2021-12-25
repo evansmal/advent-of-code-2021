@@ -11,17 +11,16 @@ function findLowestCost(inputs: number[], get_cost: (pos: number, target: number
             return count * get_cost(curr_pos, pos);
         }).reduce((prev, curr) => curr + prev, 0);
     });
-    return Math.min(...costs);
 
+    return Math.min(...costs);
 }
 
 function part2(inputs: number[]) {
+    // https://en.wikipedia.org/wiki/Triangular_number
+    const triangle_number = (n: number) => n * (n - 1) / 2;
     return findLowestCost(inputs, (pos, target) => {
-        let cost = 0;
-        for (let i = 1; i <= Math.abs(pos - target); i++) {
-            cost += i;
-        }
-        return cost;
+        const dx = Math.abs(pos - target);
+        return triangle_number(dx);
     });
 }
 
