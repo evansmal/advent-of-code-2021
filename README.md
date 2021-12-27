@@ -17,6 +17,6 @@ All solutions are implemented in TypeScript.
 | 05 | ⭐⭐ |
 | 06 | ⭐⭐ |
 | 07 | ⭐⭐ |
-| 08 |  |
+| 08 | ⭐⭐ |
 | 09 |  |
 
