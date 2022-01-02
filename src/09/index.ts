@@ -8,12 +8,6 @@ interface Node<T> {
     down?: Node<T>;
 }
 
-function toString<T>(node: Node<T>) {
-    return ` ${node.up ? node.up.value : " "}  \n` +
-        `${node.left ? node.left.value : " "} ${node.value} ${node.right ? node.right.value : " "}\n` +
-        `  ${node.down ? node.down.value : " "}  \n`;
-}
-
 function createNode<T>(value: T): Node<T> {
     return { value };
 }
