@@ -8,5 +8,6 @@ export function loadInputData(filepath: string) {
 }
 
 export function loadInputDataFromDay(day: number) {
-    return loadInputData(`./data/day${day}.dat`);
+    const filename = `./data/${day.toString().padStart(2, '0')}.txt`;
+    return loadInputData(filename);
 }
