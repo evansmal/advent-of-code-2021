@@ -57,15 +57,16 @@ function getLowPoints<T>(inputs: Node<T>[][]) {
 function uniq<T>(a: T[]) { return [...new Set(a)]; }
 
 function getBasinNeighbors(node: Node<number>): Node<number>[] {
-    return getEdges(node).filter(child => (child.value === node.value + 1 && child.value < 9));
+    return getEdges(node).filter(child => child.value < 9);
 }
 
-function getBasin(node: Node<number>): Node<number>[] {
-    const neighbors = getBasinNeighbors(node);
+function getBasin(node: Node<number>, visited: Node<number>[]): Node<number>[] {
+    const neighbors = getBasinNeighbors(node)
+        .filter(nb => visited.includes(nb) === false)
+    visited.push(...neighbors);
     return uniq([
         node,
-        ...neighbors,
-        ...neighbors.flatMap(getBasin)
+        ...neighbors.flatMap(nb => getBasin(nb, visited))
     ]);
 }
 
@@ -77,8 +78,7 @@ function part1(inputs: Node<number>[][]) {
 
 function part2(inputs: Node<number>[][]) {
     const basins = getLowPoints(inputs)
-        .map(getBasin)
-        .map(uniq);
+        .map(p => getBasin(p, []))
     basins.sort((a, b) => (a.length <= b.length ? 1 : -1))
     return basins.map(b => b.length)
         .slice(0, 3)
