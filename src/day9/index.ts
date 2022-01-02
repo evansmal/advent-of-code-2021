@@ -8,6 +8,12 @@ interface Node<T> {
     down?: Node<T>;
 }
 
+function toString<T>(node: Node<T>) {
+    return ` ${node.up ? node.up.value : " "}  \n` +
+        `${node.left ? node.left.value : " "} ${node.value} ${node.right ? node.right.value : " "}\n` +
+        `  ${node.down ? node.down.value : " "}  \n`;
+}
+
 function createNode<T>(value: T): Node<T> {
     return { value };
 }
@@ -41,18 +47,48 @@ function getEdgeValues<T>(node: Node<T>): T[] {
         .filter((edge): edge is T => !!edge)
 }
 
-function part1(inputs: Node<number>[][]) {
-    const low_points = inputs.flat().filter(node => {
+function getLowPoints<T>(inputs: Node<T>[][]) {
+    return inputs.flat().filter(node => {
         const bigger = getEdgeValues(node).filter(edge => node.value < edge);
         return (bigger.length === getEdges(node).length);
-    }).map(node => node.value);
-    return low_points.map(p => p + 1)
+    });
+}
+
+function uniq<T>(a: T[]) { return [...new Set(a)]; }
+
+function getBasinNeighbors(node: Node<number>): Node<number>[] {
+    return getEdges(node).filter(child => (child.value === node.value + 1 && child.value < 9));
+}
+
+function getBasin(node: Node<number>): Node<number>[] {
+    const neighbors = getBasinNeighbors(node);
+    return uniq([
+        node,
+        ...neighbors,
+        ...neighbors.flatMap(getBasin)
+    ]);
+}
+
+function part1(inputs: Node<number>[][]) {
+    return getLowPoints(inputs).map(node => node.value)
+        .map(p => p + 1)
         .reduce((prev, curr) => prev + curr, 0)
+}
+
+function part2(inputs: Node<number>[][]) {
+    const basins = getLowPoints(inputs)
+        .map(getBasin)
+        .map(uniq);
+    basins.sort((a, b) => (a.length <= b.length ? 1 : -1))
+    return basins.map(b => b.length)
+        .slice(0, 3)
+        .reduce((prev, curr) => prev * curr, 1);
 }
 
 function main() {
     const inputs = connectNodes(loadInputDataFromDay(9).map(parseRow));
     console.log(part1(inputs));
+    console.log(part2(inputs));
 }
 
 main();
