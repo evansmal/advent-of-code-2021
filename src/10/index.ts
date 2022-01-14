@@ -1,10 +1,17 @@
 import { loadInputDataFromDay } from "../common/input.js";
 
-const SCORE = <const>{
+const PART_ONE_SCORE = <const>{
     ")": 3,
     "]": 57,
     "}": 1197,
     ">": 25137,
+};
+
+const PART_TWO_SCORE = <const>{
+    ")": 1,
+    "]": 2,
+    "}": 3,
+    ">": 4,
 };
 
 type OpeningBracket = "{" | "[" | "<" | "(";
@@ -51,7 +58,7 @@ function tokenize(line: string): Line {
     })
 }
 
-function findInvalidBracket(line: Line): ClosingBracket | undefined {
+function findInvalidBracket(line: Line): ClosingBracket | OpeningBracket[] {
     const stack: OpeningBracket[] = [];
     for (const character of line) {
         if (isOpeningBracket(character)) { stack.push(character); }
@@ -60,16 +67,26 @@ function findInvalidBracket(line: Line): ClosingBracket | undefined {
             if (token && getMatching(token) !== character) { return character; }
         }
     }
+    return stack;
 }
 
 function part1(inputs: Line[]) {
     const invalid = inputs.map(findInvalidBracket)
-        .filter((v): v is ClosingBracket => !!v)
-    return invalid.reduce((prev, curr) => prev + SCORE[curr], 0);
+        .filter((v): v is ClosingBracket => (typeof v === "string"));
+    return invalid.reduce((prev, curr) => prev + PART_ONE_SCORE[curr], 0);
 }
 
 function part2(inputs: Line[]) {
+    const incomplete = inputs.map(findInvalidBracket)
+        .filter((l): l is OpeningBracket[] => typeof l !== "string")
+    const scores = incomplete.map(l => {
+        const stack = l.map(getMatching).reverse(); // order is important because of scoring
+        return stack.reduce((prev, curr) => 5 * prev + PART_TWO_SCORE[curr], 0);
+    });
+    scores.sort((a, b) => (a <= b ? 1 : -1))
 
+    const middle = Math.floor(scores.length / 2);
+    return scores[middle];
 }
 
 function main() {
